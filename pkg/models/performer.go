@@ -190,6 +190,8 @@ type PerformerFilterType struct {
 	CreatedAt *TimestampCriterionInput `json:"created_at"`
 	// Filter by updated at
 	UpdatedAt *TimestampCriterionInput `json:"updated_at"`
+	// Filter by last O
+	ODateSort *TimestampCriterionInput `json:"last_o_date"`
 }
 
 type PerformerCreateInput struct {

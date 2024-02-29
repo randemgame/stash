@@ -134,11 +134,13 @@ type filterBuilder struct {
 	subFilter   *filterBuilder
 	subFilterOp string
 
-	joins         joins
-	whereClauses  []sqlClause
-	havingClauses []sqlClause
-	withClauses   []sqlClause
-	recursiveWith bool
+	joins          joins
+	whereClauses   []sqlClause
+	havingClauses  []sqlClause
+	groupByClauses []sqlClause
+	withClauses    []sqlClause
+	orderByClauses []sqlClause
+	recursiveWith  bool
 
 	err error
 }
@@ -595,6 +597,19 @@ func timestampCriterionHandler(c *models.TimestampCriterionInput, column string)
 		if c != nil {
 			clause, args := getTimestampCriterionWhereClause(column, *c)
 			f.addWhere(clause, args...)
+		}
+	}
+}
+
+func oDateSortHandler(c *models.TimestampCriterionInput, column string) criterionHandlerFunc {
+	return func(ctx context.Context, f *filterBuilder) {
+		if c != nil {
+			f.addLeftJoin("performers_scenes", "", "performers.id = performers_scenes.performer_id")
+			f.addLeftJoin("scenes_o_dates", "", "performers_scenes.scene_id = scenes_o_dates.scene_id")
+
+			orderByClause := makeClause(fmt.Sprintf("ORDER BY MAX(scenes_o_dates.o_date) %s", getSortDirection(c.Modifier.String())))
+
+			f.orderByClauses = append(f.orderByClauses, orderByClause)
 		}
 	}
 }

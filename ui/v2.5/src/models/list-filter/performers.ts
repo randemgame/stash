@@ -27,6 +27,7 @@ const sortByOptions = [
   "random",
   "rating",
   "penis_length",
+  "last_o_at"
 ]
   .map(ListFilterOptions.createSortBy)
   .concat([

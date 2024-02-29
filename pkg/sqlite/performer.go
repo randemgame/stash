@@ -676,7 +676,10 @@ func (qb *PerformerStore) makeFilter(ctx context.Context, filter *models.Perform
 	query.handleCriterion(ctx, timestampCriterionHandler(filter.CreatedAt, tableName+".created_at"))
 	query.handleCriterion(ctx, timestampCriterionHandler(filter.UpdatedAt, tableName+".updated_at"))
 
+	query.handleCriterion(ctx, oDateSortHandler(filter.ODateSort, tableName+".last_o_at"))
+
 	return query
+
 }
 
 func (qb *PerformerStore) makeQuery(ctx context.Context, performerFilter *models.PerformerFilterType, findFilter *models.FindFilterType) (*queryBuilder, error) {
